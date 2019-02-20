@@ -40,10 +40,10 @@ public class MyArrayList<T> implements List {
             }
 
             public T next() {
-                if (++currentIndex > size) {
+                if (currentIndex + 1 > size) {
                     throw new NoSuchElementException();
                 } else {
-                    return (T) array[currentIndex];
+                    return (T) array[currentIndex++];
                 }
             }
 
@@ -94,7 +94,7 @@ public class MyArrayList<T> implements List {
         return false;
     }
 
-    private class MyListIterator<T> implements ListIterator {
+    private class MyListIterator implements ListIterator {
         private int currentIndex;
 
         public MyListIterator() {
@@ -110,10 +110,14 @@ public class MyArrayList<T> implements List {
         }
 
         public Object next() {
-            if (++currentIndex > size) {
+            if (currentIndex + 1 > size) {
                 throw new NoSuchElementException();
             } else {
-                return (T) array[currentIndex];
+                /*int i = currentIndex;
+                Object next = get(i);
+                currentIndex = i + 1;*/
+                return array[currentIndex++];
+
             }
         }
 
@@ -122,10 +126,10 @@ public class MyArrayList<T> implements List {
         }
 
         public Object previous() {
-            if (--currentIndex < 0) {
+            if (currentIndex - 1 < 0) {
                 throw new NoSuchElementException();
             } else {
-                return (T) array[currentIndex];
+                return (T) array[currentIndex--];
             }
         }
 
@@ -183,14 +187,28 @@ public class MyArrayList<T> implements List {
     }
 
     public void add(int index, Object element) {
-
+        if (element == null) {
+            throw new NullPointerException();
+        }
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if(size == array.length - 1) {
+            Object[] newArray = new Object[size + INIT_SIZE];
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
+        }
+        System.arraycopy(array, index, array, index + 1, size - index);
+        array[index] = element;
+        size++;
     }
+
     public ListIterator listIterator() {
-        return new MyListIterator<T>();
+        return new MyListIterator();
     }
 
     public ListIterator listIterator(int index) {
-        return new MyListIterator<T>(index);
+        return new MyListIterator(index);
     }
 
     //*************************//
