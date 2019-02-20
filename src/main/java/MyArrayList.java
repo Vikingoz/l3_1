@@ -5,15 +5,15 @@ public class MyArrayList<T> implements List {
     //Количество элементов
     private final int INIT_SIZE = 4;
     private Object[] array = new Object[INIT_SIZE];
-    private int pointer = 0;
+    private int size = 0;
 
 
     public int size() {
-        return pointer;
+        return size;
     }
 
     public boolean isEmpty() {
-        return pointer > 0 ? true : false;
+        return size > 0 ? true : false;
     }
     /*пустое значение считаем не содержится*/
     public boolean contains(Object o) {
@@ -36,14 +36,14 @@ public class MyArrayList<T> implements List {
             private int currentIndex = 0;
 
             public boolean hasNext() {
-                return currentIndex < pointer && array[currentIndex] != null;
+                return currentIndex < size && array[currentIndex] != null;
             }
 
             public T next() {
-                if (currentIndex++ > pointer) {
+                if (++currentIndex > size) {
                     throw new NoSuchElementException();
                 } else {
-                    return (T) array[currentIndex++];
+                    return (T) array[currentIndex];
                 }
             }
 
@@ -56,22 +56,144 @@ public class MyArrayList<T> implements List {
     }
 
     public Object[] toArray() {
-        return new Object[0];
+        return array;
     }
 
     public boolean add(Object o) {
-        if(pointer == array.length - 1) {
-            Object[] newArray = new Object[pointer + INIT_SIZE];
-            System.arraycopy(array, 0, newArray, 0, pointer);
+        if(size == array.length - 1) {
+            Object[] newArray = new Object[size + INIT_SIZE];
+            System.arraycopy(array, 0, newArray, 0, size);
             array = newArray;
         }
-        array[pointer++] = o;
+        array[size++] = o;
         return true;
     }
 
+    public Object remove(int index) {
+        int numMoved = size - index - 1;
+        Object returnElement = array[index];
+        System.arraycopy(array, index + 1, array, index, numMoved);
+        array[--size] = null;
+        return returnElement;
+    }
+
     public boolean remove(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        for (int i = 0; i <= size; i++) {
+            if (array[i] != null && array[i].equals(o)) {
+                remove(i);
+                return true;
+            }
+        }
+        //Object[] barray = new Object[array.length - 1];
+
+        //System.arraycopy();
         return false;
     }
+
+    private class MyListIterator<T> implements ListIterator {
+        private int currentIndex;
+
+        public MyListIterator() {
+            this.currentIndex = 0;
+        }
+
+        public MyListIterator(int currentIndex) {
+            this.currentIndex = currentIndex;
+        }
+
+        public boolean hasNext() {
+            return currentIndex < size && array[currentIndex] != null;
+        }
+
+        public Object next() {
+            if (++currentIndex > size) {
+                throw new NoSuchElementException();
+            } else {
+                return (T) array[currentIndex];
+            }
+        }
+
+        public boolean hasPrevious() {
+            return currentIndex > 0 && array[currentIndex - 1] != null;
+        }
+
+        public Object previous() {
+            if (--currentIndex < 0) {
+                throw new NoSuchElementException();
+            } else {
+                return (T) array[currentIndex];
+            }
+        }
+
+        public int nextIndex() {
+
+            return currentIndex + 1 > size ? size : currentIndex + 1;
+        }
+
+        public int previousIndex() {
+            return currentIndex - 1 < 0 ? -1 : currentIndex - 1;
+        }
+
+        public void remove() {
+            MyArrayList.this.remove(currentIndex);
+        }
+
+        public void set(Object o) {
+            MyArrayList.this.set(currentIndex, o);
+        }
+
+        public void add(Object o) {
+            MyArrayList.this.add(currentIndex, o);
+        }
+    }
+    /**
+     * Replaces the element at the specified position in this list with the
+     * specified element (optional operation).
+     *
+     * @param index index of the element to replace
+     * @param element element to be stored at the specified position
+     * @return the element previously at the specified position
+     * @throws UnsupportedOperationException if the {@code set} operation
+     *         is not supported by this list
+     * @throws ClassCastException if the class of the specified element
+     *         prevents it from being added to this list
+     * @throws NullPointerException if the specified element is null and
+     *         this list does not permit null elements
+     * @throws IllegalArgumentException if some property of the specified
+     *         element prevents it from being added to this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         ({@code index < 0 || index >= size()})
+     */
+    public Object set(int index, Object element) {
+        if (element == null) {
+            throw new NullPointerException();
+        }
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Object returnElement = array[index];
+
+        //System.arraycopy(array, index + 1, array, index, numMoved);
+        array[index] = element;
+        return returnElement;
+    }
+
+    public void add(int index, Object element) {
+
+    }
+    public ListIterator listIterator() {
+        return new MyListIterator<T>();
+    }
+
+    public ListIterator listIterator(int index) {
+        return new MyListIterator<T>(index);
+    }
+
+    //*************************//
 
     public boolean addAll(Collection c) {
         return false;
@@ -89,32 +211,12 @@ public class MyArrayList<T> implements List {
         return (T) array[index];
     }
 
-    public Object set(int index, Object element) {
-        return null;
-    }
-
-    public void add(int index, Object element) {
-
-    }
-
-    public Object remove(int index) {
-        return null;
-    }
-
     public int indexOf(Object o) {
         return 0;
     }
 
     public int lastIndexOf(Object o) {
         return 0;
-    }
-
-    public ListIterator listIterator() {
-        return null;
-    }
-
-    public ListIterator listIterator(int index) {
-        return null;
     }
 
     public List subList(int fromIndex, int toIndex) {
