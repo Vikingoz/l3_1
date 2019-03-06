@@ -1,4 +1,5 @@
 import etc.Student;
+import etc.StudentComparator;
 
 import java.util.*;
 
@@ -43,9 +44,14 @@ public class Main
             System.out.println("myArrayList(" + i + ") = " + myArrayList.get(i));
         }
         //проверю лист итератор
+        ListIterator<Integer> itr = myArrayList.listIterator();
         for (int i = 0; i < myArrayList.size(); i ++) {
-            System.out.println("myArrayList(" + i + ") = " + myArrayList.get(i));
+            System.out.println("myIterator("+itr.next()+")");
         }
+
+        /*for (int i = 0; i < myArrayList.size(); i ++) {
+            System.out.println("myArrayList(" + i + ") = " + myArrayList.get(i));
+        }*/
         //требование два
         MyArrayList<Integer> mySecondArrayList = new MyArrayList<Integer>();
         Collections.addAll(mySecondArrayList, 1,2,3);
@@ -63,6 +69,16 @@ public class Main
         Collections.addAll(myStudentList, new Student("Вася", 45),
                 new Student("Оля", 18),
                 new Student("Паша", 22));
+
+        for (int i = 0; i < myStudentList.size(); i ++) {
+            System.out.println("myStudentList before (" + i + ") = " + myStudentList.get(i).toString());
+        }
+
+        Collections.sort(myStudentList, new StudentComparator());
+
+        for (int i = 0; i < myStudentList.size(); i ++) {
+            System.out.println("myStudentList after (" + i + ") = " + myStudentList.get(i).toString());
+        }
 
     }
 }

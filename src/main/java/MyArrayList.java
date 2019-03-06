@@ -56,7 +56,9 @@ public class MyArrayList<T> implements List {
     }
 
     public Object[] toArray() {
-        return array;
+        Object[] rArray = new Object[size];
+        System.arraycopy(array, 0, rArray, 0, size);
+        return rArray;
     }
 
     public boolean add(Object o) {
@@ -147,7 +149,7 @@ public class MyArrayList<T> implements List {
         }
 
         public void set(Object o) {
-            MyArrayList.this.set(currentIndex, o);
+            MyArrayList.this.set(currentIndex - 1, o);
         }
 
         public void add(Object o) {
@@ -173,6 +175,7 @@ public class MyArrayList<T> implements List {
      *         ({@code index < 0 || index >= size()})
      */
     public Object set(int index, Object element) {
+        //System.out.println("index index (" + index + ") = " + element.toString());
         if (element == null) {
             throw new NullPointerException();
         }
@@ -254,6 +257,9 @@ public class MyArrayList<T> implements List {
     }
 
     public Object[] toArray(Object[] a) {
-        return array;
+        Object[] rArray = new Object[size];
+        System.arraycopy(array, 0, rArray, 0, size);
+        return rArray;
+        //return array;
     }
 }
