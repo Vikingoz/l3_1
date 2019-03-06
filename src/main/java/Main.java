@@ -1,3 +1,5 @@
+import etc.Student;
+
 import java.util.*;
 
 public class Main
@@ -55,7 +57,12 @@ public class Main
             System.out.println("myArrayList(" + i + ") = " + myArrayList.get(i));
         }
         //требование три
-        //Тут мы добавим класс студент (возмем со стак оверфлоу)
+        //Тут мы добавим класс студент
         // Collections.sort(myArrayList, );
+        MyArrayList<Student> myStudentList = new MyArrayList<Student>();
+        Collections.addAll(myStudentList, new Student("Вася", 45),
+                new Student("Оля", 18),
+                new Student("Паша", 22));
+
     }
 }
